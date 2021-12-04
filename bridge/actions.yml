@@ -1,0 +1,15 @@
+name: 'GitHub Discussions'
+description: 'Discussions Bridge'
+inputs:
+  discussions-category:
+    description: 'Name of the discussions category to be used'
+    default: 'Blog Comments'
+    required: false
+# outputs:
+#   time:
+#     description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.discussions-category }}
