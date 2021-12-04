@@ -12,10 +12,14 @@ jobs:
   bridge_discussions:
     runs-on: ubuntu-20.04
     steps:
-      - uses: hugo-mods/discussions/bridge
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      
+      - uses: ./bridge 
         name: Run bridge
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          discussions-category: test
 
       # - uses: actions/checkout@v2
       #   with:

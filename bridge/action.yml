@@ -13,3 +13,7 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.discussions-category }}
+
+branding:
+  icon: message-square
+  color: purple

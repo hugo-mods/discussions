@@ -8,5 +8,5 @@ COPY . .
 RUN go build -o /bin/godisc .
 
 FROM scratch
-COPY --from=build /bin/godisc ./godisc
-ENTRYPOINT ["./godisc"]
+COPY --from=build /bin/godisc /bin/godisc
+ENTRYPOINT ["/bin/godisc"]
