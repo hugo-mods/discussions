@@ -1,18 +1,27 @@
 name: 'GitHub Discussions'
 description: 'Discussions Bridge'
 inputs:
-  discussions-category:
-    description: 'Name of the discussions category to be used'
-    default: 'Blog Comments'
+  repo-token:
+    description: 'Temporary GitHub secret token issued for this action. Required permissions: "discussions: write"'
+    required: true
+  category-name:
+    description: 'Name of the discussions category to be used. Needs to be unique across the repo.'
+    default: 'Blog'
+    required: true
+  output-file:
+    description: 'Writes discussions in category-name to the file in JSON format.'
+    default: "data/discussions.json"
     required: false
 # outputs:
-#   time:
-#     description: 'The time we greeted you'
+#   data:
+#     description: 'Blog comment data'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.discussions-category }}
+  env:
+    REPO_TOKEN: ${{ inputs.repo-token }}
+    CATEGORY_NAME: ${{ inputs.discussions-category }}
+    OUTPUT_FILE: ${{ inputs.output-file }}
 
 branding:
   icon: message-square

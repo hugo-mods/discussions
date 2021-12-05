@@ -2,11 +2,12 @@ FROM golang:1.17-alpine AS build
 
 # RUN apk add --no-cache make
 
-WORKDIR /go/src/godisc/
+WORKDIR /go/src/bridge/
 
 COPY . .
-RUN go build -o /bin/godisc .
+# RUN CGO_ENABLED=0 go build -o /go/bin/bridge .
+RUN go build -o /bridge .
 
-FROM scratch
-COPY --from=build /bin/godisc /bin/godisc
-ENTRYPOINT ["/bin/godisc"]
+# FROM scratch
+# COPY --from=build /go/bin/bridge /bridge
+ENTRYPOINT ["/bridge"]
