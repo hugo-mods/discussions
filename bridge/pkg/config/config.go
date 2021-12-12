@@ -19,8 +19,8 @@ type Config struct {
 
 	OutputFile string
 
-	SiteRSS       string
-	SiteMap       string
+	SiteRSSURL    string
+	SiteMapURL    string
 	SiteURLPrefix string
 
 	EventName string
@@ -41,15 +41,15 @@ func (c *Config) Validate() error {
 	if c.OutputFile == "" {
 		errors.Add(config.EmptyErr("OutputFile", ""))
 	}
-	if c.SiteMap == "" && c.SiteRSS == "" {
-		errors.Add(config.EmptyErr("SiteMap", c.SiteMap))
-		errors.Add(config.EmptyErr("SiteRSS", c.SiteRSS))
+	if c.SiteMapURL == "" && c.SiteRSSURL == "" {
+		errors.Add(config.EmptyErr("SiteMapURL", c.SiteMapURL))
+		errors.Add(config.EmptyErr("SiteRSSURL", c.SiteRSSURL))
 	}
-	if c.SiteMap != "" && !strings.HasPrefix(c.SiteMap, "http") {
-		errors.Add(config.Err("SiteMap", c.SiteMap, "must be a valid URL (starting with http)"))
+	if c.SiteMapURL != "" && !strings.HasPrefix(c.SiteMapURL, "http") {
+		errors.Add(config.Err("SiteMapURL", c.SiteMapURL, "must be a valid URL (starting with http)"))
 	}
-	if c.SiteRSS != "" && !strings.HasPrefix(c.SiteRSS, "http") {
-		errors.Add(config.Err("SiteRSS", c.SiteRSS, "must be a valid URL (starting with http)"))
+	if c.SiteRSSURL != "" && !strings.HasPrefix(c.SiteRSSURL, "http") {
+		errors.Add(config.Err("SiteRSSURL", c.SiteRSSURL, "must be a valid URL (starting with http)"))
 	}
 	return errors.AsError()
 }
@@ -92,8 +92,8 @@ func Load() (*Config, error) {
 				DiscussionOpener: os.Getenv("DISCUSSION_OPENER"),
 				OutputFile:       os.Getenv("OUTPUT_FILE"),
 
-				SiteRSS:       os.Getenv("SITE_RSS"),
-				SiteMap:       os.Getenv("SITE_MAP"),
+				SiteRSSURL:    os.Getenv("SITE_RSS_URL"),
+				SiteMapURL:    os.Getenv("SITE_MAP_URL"),
 				SiteURLPrefix: os.Getenv("SITE_URL_PREFIX"),
 
 				EventName: os.Getenv("GITHUB_EVENT_NAME"),

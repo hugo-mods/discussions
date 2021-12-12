@@ -15,10 +15,10 @@ import (
 
 func main() {
 	cfg, err := config.Load()
+	fmt.Println("got config:", cfg)
 	if err != nil {
 		fatal("configuration error: %s", err)
 	}
-	fmt.Println("got config:", cfg)
 
 	tokenSource := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("REPO_TOKEN")},
@@ -45,7 +45,7 @@ func main() {
 		fatal("could not get discussions for category %q", category.ID)
 	}
 
-	webSite, err := site.New(cfg.SiteMap, cfg.SiteRSS, cfg.DiscussionOpener)
+	webSite, err := site.New(cfg.SiteMapURL, cfg.SiteRSSURL, cfg.DiscussionOpener)
 	if err != nil {
 		fatal("could not create site: %v", err)
 	}
