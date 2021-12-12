@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 1
       
-      - uses: ./bridge 
+      - uses: hugo-mods/discussions-action@v0.1.0
         name: Run bridge
         with:
           category-name: Blog
