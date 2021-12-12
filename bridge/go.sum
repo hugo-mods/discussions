@@ -99,8 +99,8 @@ github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
-github.com/kdevo/gocfg v0.0.0-20211211224141-90c2da534a28 h1:L8tCVvv8YTxMYTshXtB93NDCGio6jRRtN0SLZEDv1so=
-github.com/kdevo/gocfg v0.0.0-20211211224141-90c2da534a28/go.mod h1:m94DK9Y9qaleVt4e0piXztCehAdqQDDKctWAilwmlBQ=
+github.com/kdevo/config v0.0.0-20211212152733-5f7ef3589346 h1:up2PxnnSoSyHRsbXQuOXeJk8w0APFEpxX7ckDcE3r4I=
+github.com/kdevo/config v0.0.0-20211212152733-5f7ef3589346/go.mod h1:0j3RxctThirApYF2rxoAkdWcN2HIOvWylKSxB6Bpfck=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
