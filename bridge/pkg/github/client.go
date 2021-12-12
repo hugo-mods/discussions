@@ -116,7 +116,7 @@ func (c *Client) CreateDiscussion(categoryID, title, body string) (string, error
 		Title:        githubv4.String(title),
 		Body:         githubv4.String(body),
 	}
-	err = c.gql.Mutate(context.Background(), m, input, nil)
+	err = c.gql.Mutate(context.Background(), &m, input, nil)
 	if err != nil {
 		return "", fmt.Errorf("could not create discussion: %v", err)
 	}
