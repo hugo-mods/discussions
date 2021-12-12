@@ -1,12 +1,13 @@
-package client
+package github
 
 type Discussion struct {
-	URL      string
-	Title    string
-	Body     string
-	Author   Author
-	Locked   bool
-	Comments struct {
+	URL         string
+	Title       string
+	Body        string
+	Author      Author
+	Locked      bool
+	UpvoteCount int
+	Comments    struct {
 		Nodes      []Comment
 		TotalCount int
 	} `graphql:"comments(first: $firstComments)"`

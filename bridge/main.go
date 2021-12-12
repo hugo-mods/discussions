@@ -2,31 +2,30 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"golang.org/x/oauth2"
 
-	"github.com/hugo-mods/discussions/bridge/pkg/client"
 	"github.com/hugo-mods/discussions/bridge/pkg/config"
+	"github.com/hugo-mods/discussions/bridge/pkg/github"
+	"github.com/hugo-mods/discussions/bridge/pkg/model"
+	"github.com/hugo-mods/discussions/bridge/pkg/site"
 )
 
 func main() {
-	cfg := config.FromEnvironment()
-	fmt.Println("got config:", cfg)
-	if eventName := os.Getenv("GITHUB_EVENT_NAME"); eventName != "" {
-		fmt.Println("triggered by:", eventName)
-		fmt.Println("  event path:", os.Getenv("GITHUB_EVENT_PATH"))
+	cfg, err := config.Load()
+	if err != nil {
+		fatal("configuration error: %s", err)
 	}
+	fmt.Println("got config:", cfg)
 
 	tokenSource := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("REPO_TOKEN")},
 	)
 	httpClient := oauth2.NewClient(context.Background(), tokenSource)
 
-	client := client.New(httpClient, cfg.RepoOwner, cfg.RepoName)
+	client := github.New(httpClient, cfg.RepoOwner, cfg.RepoName)
 
 	categories, err := client.Categories()
 	if err != nil {
@@ -45,20 +44,49 @@ func main() {
 	if err != nil {
 		fatal("could not get discussions for category %q", category.ID)
 	}
-	data, err := json.Marshal(discussions)
+
+	webSite, err := site.New(cfg.SiteMap, cfg.SiteRSS, cfg.DiscussionOpener)
 	if err != nil {
-		fatal("could not marshal JSON")
+		fatal("could not create site: %v", err)
 	}
-	fmt.Printf("got %d discussions\n", len(discussions))
+	siteDiscussions := webSite.RelateDiscussions(model.FromGitHubDiscussions(discussions))
 
-	if err := os.MkdirAll(filepath.Dir(cfg.OutputFile), 0777); err != nil {
-		fatal("could not create directories to write discussions to JSON file: %v", err)
+	if eventName := cfg.EventName; eventName != "" {
+		fmt.Println("triggered by:", eventName)
+		fmt.Println("  event path:", cfg.EventPath)
 	}
-	if err := os.WriteFile(cfg.OutputFile, data, 0666); err != nil {
-		fatal("could not write discussions to JSON file: %v", err)
-	}
-	fmt.Println("successfully wrote discussions")
+	switch cfg.EventName {
+	case "push":
+		pages, err := webSite.Pages(cfg.SiteURLPrefix)
+		if err != nil {
+			fatal("could not get site's pages: %v", err)
+		}
 
+		var newPages []site.Page
+		for url := range pages {
+			if !siteDiscussions.HasPage(url) {
+				newPages = append(newPages, pages[url])
+			}
+		}
+		fmt.Printf("got %d pages from site. found %d unsynced discussions.\n", len(pages), len(newPages))
+		for _, p := range newPages {
+			disc, err := webSite.NewDiscussion(p)
+			if err != nil {
+				fmt.Printf("could not create discussion: %v", err)
+				continue
+			}
+			if _, err := client.CreateDiscussion(category.ID, disc.Title, disc.Body); err != nil {
+				fmt.Printf("could not create discussion: %v", err)
+			}
+		}
+	case "discussion", "discussion_comment":
+		if err := siteDiscussions.Save(cfg.OutputFile); err != nil {
+			fatal("could not save discussions: %v", err)
+		}
+		fmt.Printf("wrote %d discussions to %s\n", len(siteDiscussions), cfg.OutputFile)
+	default:
+		fmt.Printf("unhandled event name %q. doing nothing.\n", cfg.EventName)
+	}
 }
 
 func fatal(msg string, arg ...interface{}) {

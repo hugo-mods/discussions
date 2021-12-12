@@ -3,6 +3,7 @@ module github.com/hugo-mods/discussions/bridge
 go 1.17
 
 require (
+	github.com/kdevo/gocfg v0.0.0-20211211224141-90c2da534a28
 	github.com/shurcooL/githubv4 v0.0.0-20211117020012-5800b9de5b8b
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 )

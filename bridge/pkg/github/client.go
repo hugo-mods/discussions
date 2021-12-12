@@ -1,4 +1,4 @@
-package client
+package github
 
 import (
 	"context"
@@ -40,7 +40,6 @@ func (c *Client) WithMaxDiscussions(n int) *Client {
 }
 
 func (c *Client) Discussions(categoryID string) ([]Discussion, error) {
-	// TODO(kdevo): Loop through pages
 	var q struct {
 		Repository struct {
 			Discussions struct {
